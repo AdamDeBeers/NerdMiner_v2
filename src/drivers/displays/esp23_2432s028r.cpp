@@ -154,7 +154,14 @@ extern unsigned long mPoolUpdate;
 void printPoolData(){
   if ((hasChangedScreen) || (mPoolUpdate == 0) || (millis() - mPoolUpdate > UPDATE_POOL_min * 60 * 1000)){     
       if (Settings.PoolAddress != "tn.vkbit.com") { 
-          pData = getPoolData();             
+#ifdef NO_POOL_STATS
+          pData.workersCount = 1;
+          pData.workersHash = "-";
+          pData.bestDifficulty = "-";
+          mPoolUpdate = millis();
+#else
+          pData = getPoolData();
+#endif             
           background.createSprite(320,50); //Background Sprite
           if (!background.created()) {    
             Serial.println("###### POOL SPRITE ERROR ######");
@@ -538,8 +545,12 @@ void esp32_2432S028R_DoLedStuff(unsigned long frame)
   // / Check the touch coordinates 110x185 210x240
   if (currentMillis - previousTouchMillis >= 500)
     { 
-      int16_t t_x , t_y;  // To store the touch coordinates
+      int16_t t_x = 0, t_y = 0;  // To store the touch coordinates
+#ifdef NO_TOUCH
+      bool pressed = false;
+#else
       bool pressed = touch.getXY(t_x, t_y);
+#endif
       if (pressed) {                        
           if (((t_x > 109)&&(t_x < 211)) && ((t_y > 185)&&(t_y < 241))) {
             bottomScreenBlue ^= true;

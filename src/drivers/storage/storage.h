@@ -18,7 +18,9 @@
 #define DEFAULT_POOLPORT	3333
 #define DEFAULT_TIMEZONE	2
 #define DEFAULT_SAVESTATS	false
+#ifndef DEFAULT_INVERTCOLORS
 #define DEFAULT_INVERTCOLORS	false
+#endif
 #define DEFAULT_BRIGHTNESS	250
 
 // JSON config files
@@ -61,4 +63,4 @@ struct TSettings
 	int Brightness{ DEFAULT_BRIGHTNESS };
 };
 
-#endif // _STORAGE_H_
+#endif // _STORAGE_H_
