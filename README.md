@@ -1,3 +1,31 @@
+# Adam's NerdMiner fork (just for fun)
+
+This is my personal fork of [BitMaker-hub/NerdMiner_v2](https://github.com/BitMaker-hub/NerdMiner_v2), made for fun and for my homelab.
+All credit for the miner itself goes to the original authors. Below is what I added on top (branch `adam-ili9341`).
+
+## What's added
+
+- **ESP32 devkit (WROOM) + 2.4" ILI9341 320x240** – env `ESP32-devkit-ILI9341-adam`, hand-wired display
+  (CLK 18, MOSI 23, CS 5, DC 2, RST 4, BL 22), inverted colors by default.
+  SD card, touch and pool-stats fetch are switched off for this board (they shared pins / failed on TLS).
+- **ESP32-S3-DevKitC-1 N16R8 + 0.96" SSD1306 128x64 OLED** – env `ESP32-S3-N16R8-OLED-adam` (SDA 16, SCL 17).
+- **Home Assistant over MQTT** – broker, port, user and password in the setup portal.
+  The miner announces itself via MQTT Discovery (hashrate, chip temperature, best difficulty, shares,
+  valid blocks, templates, total hashes, uptime, Wi-Fi signal), every 15 s.
+  Device identity comes from the chip MAC, the worker name after the dot in the BTC address
+  (`bc1q....nerd1`) is only the display name.
+- **Setup portal open for 5 minutes** instead of 3.
+- **Custom boot screen** on the OLED ("Becoming a millionaire...").
+
+## Build
+
+```
+py -m platformio run -e ESP32-devkit-ILI9341-adam -t upload
+py -m platformio run -e ESP32-S3-N16R8-OLED-adam -t upload
+```
+
+---
+
 # NerdSoloMiner
 
 **The NerdSoloMiner v2**

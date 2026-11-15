@@ -1,4 +1,5 @@
 
+#include "adam_mqtt.h"
 #include <Wire.h>
 
 #include <Arduino.h>
@@ -125,6 +126,11 @@ void setup()
 
   /******** INIT WIFI ************/
   init_WifiManager();
+
+#ifdef ADAM_MQTT
+  /******** HOME ASSISTANT MQTT (Adam) ************/
+  adamMqttStart();
+#endif
 
   /******** CREATE TASK TO PRINT SCREEN *****/
   //tft.pushImage(0, 0, MinerWidth, MinerHeight, MinerScreen);

@@ -2,8 +2,12 @@
 #define _LILYGO_T3_V1_H
 
 // LilyGo T3 V1.6.1 - SSD1306 128x64 OLED (I2C)
+#ifndef SDA_PIN
 #define SDA_PIN 21
+#endif
+#ifndef SCL_PIN
 #define SCL_PIN 22
+#endif
 
 #define PIN_BUTTON_1 0
 

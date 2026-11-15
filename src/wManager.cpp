@@ -15,6 +15,9 @@
 #include "drivers/storage/storage.h"
 #include "mining.h"
 #include "timeconst.h"
+#ifdef ADAM_MQTT
+#include "adam_mqtt.h"
+#endif
 
 #include <ArduinoJson.h>
 #include <esp_flash.h>
@@ -96,6 +99,9 @@ void saveConfigCallback()
 {
     Serial.println("Should save config");
     shouldSaveConfig = true;    
+#ifdef ADAM_MQTT
+    adamMqttSaveParams();
+#endif
     //wm.setConfigPortalBlocking(false);
 }
 
@@ -195,7 +201,10 @@ void init_WifiManager()
     //Advanced settings
     wm.setConfigPortalBlocking(false); //Hacemos que el portal no bloquee el firmware
     wm.setConnectTimeout(40); // how long to try to connect for before continuing
-    wm.setConfigPortalTimeout(180); // auto close configportal after n seconds
+#ifndef ADAM_PORTAL_TIMEOUT
+#define ADAM_PORTAL_TIMEOUT 180
+#endif
+    wm.setConfigPortalTimeout(ADAM_PORTAL_TIMEOUT); // auto close configportal after n seconds
     // wm.setCaptivePortalEnable(false); // disable captive portal redirection
     // wm.setAPClientCheck(true); // avoid timeout if client connected to softap
     //wm.setTimeout(120);
@@ -243,6 +252,9 @@ void init_WifiManager()
   wm.addParameter(&time_text_box_num);
   wm.addParameter(&features_html);
   wm.addParameter(&save_stats_to_nvs);
+#ifdef ADAM_MQTT
+  adamMqttAddParams(wm);
+#endif
   #if defined(ESP32_2432S028R) || defined(ESP32_2432S028_2USB)
   char checkboxParams2[24] = "type=\"checkbox\"";
   if (Settings.invertColors)

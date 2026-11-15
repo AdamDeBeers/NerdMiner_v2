@@ -41,7 +41,9 @@ void ssd1306Display_Screen1(unsigned long mElapsed) {
 
   // Header
   u8g2.setFont(u8g2_font_6x10_tf);
+#ifndef ADAM_NO_BRAND
   u8g2.drawStr(0, 10, "NERDMINER v2");
+#endif
   u8g2.drawHLine(0, 12, 128);
 
   // Hashrate (big)
@@ -90,8 +92,14 @@ void ssd1306Display_LoadingScreen(void) {
   Serial.println("Loading...");
   u8g2.clearBuffer();
   u8g2.setFont(u8g2_font_helvB18_tf);
+#ifdef ADAM_NO_BRAND
+  u8g2.setFont(u8g2_font_helvB12_tf);
+  u8g2.drawStr(22, 28, "Becoming a");
+  u8g2.drawStr(10, 50, "millionaire...");
+#else
   u8g2.drawStr(10, 30, "NERD");
   u8g2.drawStr(10, 55, "MINER");
+#endif
   u8g2.sendBuffer();
 }
 
