@@ -58,6 +58,9 @@
 #elif defined(LILYGO_T3_V1)
 #include "lilygoT3V1.h"
 
+#elif defined(ADAM_LCD1602)
+#include "adamLcd1602.h"
+
 #else
 #error "No device defined"
 #endif

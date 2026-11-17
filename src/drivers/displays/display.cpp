@@ -68,6 +68,10 @@ DisplayDriver *currentDisplayDriver = &sp_kcDisplayDriver;
 DisplayDriver *currentDisplayDriver = &ssd1306DisplayDriver;
 #endif
 
+#ifdef ADAM_LCD1602_DISPLAY
+DisplayDriver *currentDisplayDriver = &adamLcd1602DisplayDriver;
+#endif
+
 
 // Initialize the display
 void initDisplay()
