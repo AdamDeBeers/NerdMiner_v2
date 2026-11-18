@@ -1,5 +1,5 @@
 // Adam: driver for a 16x2 character LCD (HD44780 + PCF8574 I2C backpack).
-// Pages rotate every 5 s: hashrate/best diff, shares/blocks/temp, uptime/time.
+// Pages rotate every 5 s: hashrate/best diff, shares/blocks/temp, IP/RSSI, uptime/time.
 
 #include "displayDriver.h"
 
@@ -8,6 +8,7 @@
 #include <Wire.h>
 #include <LiquidCrystal_I2C.h>
 #include "monitor.h"
+#include <WiFi.h>
 
 #ifndef ADAM_LCD_PAGE_MS
 #define ADAM_LCD_PAGE_MS 5000
@@ -73,7 +74,7 @@ static void lcd1602_MainScreen(unsigned long mElapsed)
                   data.currentHashRate.c_str(), data.completedShares.c_str(), data.bestDiff.c_str());
 
     char l0[24], l1[24];
-    uint8_t page = (millis() / ADAM_LCD_PAGE_MS) % 3;
+    uint8_t page = (millis() / ADAM_LCD_PAGE_MS) % 4;
     switch (page)
     {
     case 0:
@@ -83,6 +84,10 @@ static void lcd1602_MainScreen(unsigned long mElapsed)
     case 1:
         snprintf(l0, sizeof(l0), "Shares:%s Blk:%s", data.completedShares.c_str(), data.valids.c_str());
         snprintf(l1, sizeof(l1), "Tmpl:%s T:%sC", data.templates.c_str(), data.temp.c_str());
+        break;
+    case 2:
+        snprintf(l0, sizeof(l0), "IP  RSSI:%ddBm", (int)WiFi.RSSI());
+        snprintf(l1, sizeof(l1), "%s", WiFi.localIP().toString().c_str());
         break;
     default:
     {

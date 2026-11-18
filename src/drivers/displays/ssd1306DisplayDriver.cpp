@@ -5,6 +5,7 @@
 
 #include <U8g2lib.h>
 #include "monitor.h"
+#include <WiFi.h>
 
 #ifdef U8X8_HAVE_HW_I2C
 #include <Wire.h>
@@ -88,6 +89,27 @@ void ssd1306Display_Screen2(unsigned long mElapsed) {
   serialPrint_ssd1306(mElapsed);
 }
 
+void ssd1306Display_Screen3(unsigned long mElapsed) {
+  u8g2.clearBuffer();
+
+  u8g2.setFont(u8g2_font_6x10_tf);
+  u8g2.drawStr(0, 10, "NETWORK");
+  u8g2.drawHLine(0, 12, 128);
+
+  String ip   = WiFi.localIP().toString();
+  String ssid = "SSID: " + WiFi.SSID();
+  String rssi = "RSSI: " + String(WiFi.RSSI()) + " dBm";
+
+  u8g2.setFont(u8g2_font_helvB12_tf);
+  u8g2.drawStr(0, 32, ip.c_str());
+  u8g2.setFont(u8g2_font_5x7_tf);
+  u8g2.drawStr(0, 48, ssid.c_str());
+  u8g2.drawStr(0, 58, rssi.c_str());
+
+  u8g2.sendBuffer();
+  serialPrint_ssd1306(mElapsed);
+}
+
 void ssd1306Display_LoadingScreen(void) {
   Serial.println("Loading...");
   u8g2.clearBuffer();
@@ -119,7 +141,8 @@ void ssd1306Display_AnimateCurrentScreen(unsigned long frame) {}
 
 CyclicScreenFunction ssd1306DisplayCyclicScreens[] = {
     ssd1306Display_Screen1,
-    ssd1306Display_Screen2
+    ssd1306Display_Screen2,
+    ssd1306Display_Screen3
 };
 
 DisplayDriver ssd1306DisplayDriver = {
